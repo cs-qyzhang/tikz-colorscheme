@@ -1,0 +1,92 @@
+% !TeX program = lualatex
+% tikz-colorscheme 宏包目前只能使用 LuaTeX 引擎编译：
+%   ~$ lualatex example.tex
+
+% 建议在使用 tikz-colorscheme 生成配色方案时，将要生成的图单独放到一个
+% .tex 文档中，这样能够提高编译速度并且更为直观。
+%
+% 使用 \documentclass[tikz]{standalone} 文档类会为每一个配色主题对应的
+% 图案生成一页，并且在 colorscheme 环境开启 nodefine 选项时会使生成的
+% 文档非常直观
+\documentclass[tikz]{standalone}
+\usepackage{tikz}
+% 导入 tikz-colorscheme 宏包，该宏包目前没有任何选项
+\usepackage{tikz-colorscheme}
+
+\usetikzlibrary{mindmap,shadows}
+
+\begin{document}
+
+% 来自于 tikz-colorscheme 宏包的 colorscheme 环境
+\begin{colorscheme}[
+  5,           % 使用的配色方案数目，默认为 5。目前收录了 2002 个配色方案
+               %
+  random,      % 配色方案使用方式，共有以下三种：
+               %   - random:  随机从所有配色方案中挑选。该选项为默认方式
+               %   - popular: 根据 colorhunt.co 网站上用户投票数量对配色方案进行
+               %              排序，从排名的前 2 * <配色方案数目> 中随机挑选个
+               %   - top:     选取排序后的前 <配色方案数目> 个配色方案，并按照
+               %              排序顺序生成结果
+               % \textbf{注意：}网站上的投票结果与其配色方案发布的时间有一定的
+               % 关系，新发布的配色方案往往投票数较少，所以投票数仅有一部分参考
+               % 价值，也因此宏包的默认选项设为了 random
+               %
+  nodefine     % 默认在每一个配色方案生成的图形之前都会打印该配色方案对应的定义
+               % 语句。该选项将会取消配色方案定义的打印。（每个配色方案对应的
+               % 定义还会在编译时输出到控制台，nodefine 选项只会取消文档中的打印）
+               %
+% define after % 该选项也是用于控制文档中配色方案定义语句的打印，定义了该选项后
+               % 每个配色方案的定义不会在对应的图形之前打印，而是会在所有图形
+               % 生成后一起打印
+]
+
+% 以下图形样例摘自 pgfmanual，Tutorial: A Lecture Map for Johannes 一章，可
+% 使用 texdoc tikz 命令查看
+\begin{tikzpicture}[mindmap]
+\begin{scope}[
+  every node/.style={concept,circular drop shadow,execute at begin node=\hskip0pt},
+  text=white,grow cyclic,
+  root concept/.append style={concept color=black,fill=white,line width=1ex,text=black,font=\large\scshape},
+  % col1 代表配色方案中的主色调，col2 为次色调，col3 和 col4 则是第三和第四个色调
+  solving problems/.style={concept color=col1,faded/.style={concept color=col1!50}},
+  computational problems/.style={concept color=col2,faded/.style={concept color=col2!50}},
+  computational models/.style={concept color=col3,faded/.style={concept color=col3!50}},
+  measuring complexity/.style={concept color=col4,faded/.style={concept color=col4!50}},
+  level 1/.append style={level distance=4.5cm,sibling angle=90,font=\scshape},
+  level 2/.append style={level distance=3cm,sibling angle=45,font=\scriptsize}
+]
+  \node [root concept] {Computational Complexity}
+    child [computational problems] { node {Computational Problems}
+      child { node {Problem Measures} }
+      child { node {Problem Aspects} }
+      child { node {Problem Domains} }
+      child { node {Key Problems} }
+    }
+    child [computational models] { node {Computational Models}
+      child { node {Turing Machines} }
+      child { node {Random-Access Machines} }
+      child { node {Circuits} }
+      child { node {Binary Decision Diagrams} }
+      child { node {Oracle Machines} }
+      child { node {Programming in Logic} }
+    }
+    child [measuring complexity] { node {Measuring Complexity}
+      child { node {Complexity Measures} }
+      child { node {Classifying Complexity} }
+      child { node {Comparing Complexity} }
+      child { node {Describing Complexity} }
+    }
+    child [solving problems] { node {Solving Problems}
+      child { node {Exact Algorithms} }
+      child { node {Randomization} }
+      child { node {Fixed-Parameter Algorithms} }
+      child { node {Parallel Computation} }
+      child { node {Partial Solutions} }
+      child { node {Approximation} }
+    };
+\end{scope}
+\end{tikzpicture}
+
+\end{colorscheme}
+
+\end{document}
